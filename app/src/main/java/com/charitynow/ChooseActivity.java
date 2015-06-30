@@ -2,6 +2,7 @@ package com.charitynow;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +30,7 @@ public class ChooseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         setContentView(R.layout.activity_choose);
         mET = (EditText) findViewById(R.id.editText);
         if (!LoadValue("companyName").equals("")){
@@ -73,12 +76,16 @@ public class ChooseActivity extends Activity {
         else{
             Data.companyName = mET.getText().toString();
             SetValue("companyName", mET.getText().toString());
-            startActivity(new Intent(getApplicationContext(), PlacesListActivity.class));
+            getWindow().setExitTransition(new Explode());
+            Intent intent = new Intent(getApplicationContext(), PlacesListActivity.class);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         }
     }
 
     public void startUserActivity(View view){
-        startActivity(new Intent(getApplicationContext(), OrganizationListActivity.class));
+        getWindow().setExitTransition(new Explode());
+        Intent intent = new Intent(getApplicationContext(), OrganizationListActivity.class);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
     public void SetValue(String s, String s2){
